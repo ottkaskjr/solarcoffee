@@ -45,9 +45,9 @@ namespace SolarCoffee.Web
             });
 
             services.AddTransient<IProductService, ProductService>();
-            services.AddTransient<ICustomerService, CustomerService>();
+            services.AddTransient<Services.Customer.ICustomerService, CustomerService>();
             services.AddTransient<IInventoryService, InventoryService>();
-            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<Services.Order.IOrderService, OrderService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

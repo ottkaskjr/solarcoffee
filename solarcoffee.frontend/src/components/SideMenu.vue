@@ -1,9 +1,38 @@
 <template>
   <div class="side-menu-container">
-    <img id="imgLogo" alt="Solar Coffee logo" src="../assets/logo.png" />
+    <router-link to="/">
+      <img id="imgLogo" alt="Solar Coffee logo" src="../assets/logo.png" />
+    </router-link>
+
     <h1>Management Portal</h1>
-    <solar-button id="menuInventory" :link="'/inventory'">
+    <!--you can add is-full-width as an attribute which translates for isFullWidth prop in SolarButton component-->
+    <solar-button
+      id="menuInventory"
+      @button:click="goToRoute('/inventory')"
+      is-full-width
+    >
       Inventory
+    </solar-button>
+    <solar-button
+      id="menuCustomers"
+      @button:click="goToRoute('/customers')"
+      is-full-width
+    >
+      Manage Customers
+    </solar-button>
+    <solar-button
+      id="menuInvoice"
+      @button:click="goToRoute('/invoice/new')"
+      is-full-width
+    >
+      New Invoice
+    </solar-button>
+    <solar-button
+      id="menuOrders"
+      @button:click="goToRoute('/orders')"
+      is-full-width
+    >
+      Orders
     </solar-button>
   </div>
 </template>
@@ -16,7 +45,11 @@ import SolarButton from '@/components/SolarButton.vue';
   name: 'SideMenu',
   components: { SolarButton },
 })
-export default class SideMenu extends Vue {}
+export default class SideMenu extends Vue {
+  goToRoute(route: string) {
+    this.$router.push(route);
+  }
+}
 </script>
 
 <style scoped lang="scss">

@@ -17,7 +17,7 @@ using SolarCoffee.Services.Product;
 using SolarCoffee.Services.Customer;
 using SolarCoffee.Services.Inventory;
 using SolarCoffee.Services.Order;
-
+using Newtonsoft.Json.Serialization;
 
 namespace SolarCoffee.Web
 {
@@ -33,8 +33,17 @@ namespace SolarCoffee.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // CORS !!!
+            services.AddCors();
 
-            services.AddControllers();
+            /// NEWTONSOFTJSON !!! provides better json serialization
+            services.AddControllers().AddNewtonsoftJson(opts =>
+            {
+                opts.SerializerSettings.ContractResolver = new DefaultContractResolver {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                };
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SolarCoffee.Web", Version = "v1" });
@@ -63,6 +72,15 @@ namespace SolarCoffee.Web
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            // CORS !!! Must be located exactly here
+            app.UseCors(builder => builder.WithOrigins(
+                "http://localhost:8080", 
+                "http://localhost:8081", 
+                "http://localhost:8082")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
 
             app.UseAuthorization();
 

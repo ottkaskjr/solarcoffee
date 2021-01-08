@@ -28,6 +28,10 @@ namespace SolarCoffee.Web.Controllers
         [HttpPost("/api/invoice")]
         public ActionResult GenerateNewOrder([FromBody] InvoiceModel invoice) // body structure must match InvoiceModel class
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             _logger.LogInformation("Generating invoice");
             var order = OrderMapper.SerializeInvoiceToOrder(invoice);
             order.Customer = _customerService.GetById(invoice.CustomerId);

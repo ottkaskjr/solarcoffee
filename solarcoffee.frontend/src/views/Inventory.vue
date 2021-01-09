@@ -5,11 +5,12 @@
     </h1>
     <hr />
     <div class="inventory-actions">
-      <!-- since solar-button is a component which can use any other click event that's previously bind to it, we need to use .native-->
-      <solar-button @click.native="showNewProductModal" id="addNewBtn">
+      <!-- since solar-button is a component which can use any other click event that's previously bind to it, we need to use .native NOT USING ANYMORE-->
+      <!-- @button:click points to SolarButton @click event which holds the onClick method which emits this button:click-->
+      <solar-button @button:click="showNewProductModal" id="addNewBtn">
         Add New Item
       </solar-button>
-      <solar-button @click.native="showShipmentModal" id="receiveShipmentBtn">
+      <solar-button @button:click="showShipmentModal" id="receiveShipmentBtn">
         Receive Shipment
       </solar-button>
     </div>

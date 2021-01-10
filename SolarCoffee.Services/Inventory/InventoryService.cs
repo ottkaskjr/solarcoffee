@@ -24,17 +24,25 @@ namespace SolarCoffee.Services.Inventory
         /// Creates a Snapshot record using the provided ProductInventory instance
         /// </summary>
         /// <param name="inventory"></param>
-        private void CreateSnapshot(ProductInventory inventory)
+        private void CreateSnapshot()
         {
             var now = DateTime.UtcNow;
-            var snapshot = new ProductInventorySnapshot
-            {
-                SnapshotTime = now,
-                Product = inventory.Product,
-                QuantityOnHand = inventory.QuantityOnHand
-            };
 
+            var inventories = _db.ProductInventories
+                .Include(inv => inv.Product).ToList();
+
+            foreach (var inventory in inventories)
+            {
+                var snapshot = new ProductInventorySnapshot
+                {
+                    SnapshotTime = now,
+                    Product = inventory.Product,
+                    QuantityOnHand = inventory.QuantityOnHand
+                };
             _db.Add(snapshot);
+            }
+
+
             // don't need to save changes because CreateSnapshot is follewed by _db.SaveChanges
         }
 
@@ -70,7 +78,7 @@ namespace SolarCoffee.Services.Inventory
         /// <returns></returns>
         public List<ProductInventorySnapshot> GetSnapshotHistory()
         {
-            var earliest = DateTime.UtcNow - TimeSpan.FromHours(6);
+            var earliest = DateTime.UtcNow - TimeSpan.FromHours(2);
             return _db.ProductInventorySnapshots
                 .Include(snap => snap.Product)
                 .Where(snap => snap.SnapshotTime > earliest && !snap.Product.IsArchived)
@@ -98,7 +106,7 @@ namespace SolarCoffee.Services.Inventory
 
                 try
                 {
-                    CreateSnapshot(inventory);
+                    CreateSnapshot();
                 }
                 catch (Exception e)
                 {
